@@ -12,7 +12,8 @@ export default class GoblinGame {
     this.board = board;
     this.character = character;
     this.score = 0;
-    this.aiScore = 0;
+    this.scoreLife = 5;
+    this.heart = null;
     this.bestScore = localStorage.getItem('goblinGameScore', this.bestScore) || 0;
     this.characterMove = null;
     this.container = null;
@@ -24,6 +25,7 @@ export default class GoblinGame {
   init() {
     this.character.characterStop();
     this.reset();
+    this.setHearts();
     this.createUI();
     this.character.characterLogic();
   }
@@ -45,6 +47,8 @@ export default class GoblinGame {
     this.container = container;
 
     body.insertBefore(this.container, body.firstChild);
+
+    this.setHearts();
   }
 
   /**
@@ -62,8 +66,8 @@ export default class GoblinGame {
         <div class="score">${this.score}
         </div>
       </div>
-      <div class="statistic">AI Score
-        <div class="score-miss">${this.aiScore}
+      <div class="statistic">Life
+        <div class="score-life">${this.heart}
         </div>
       </div>
     </div>
@@ -72,10 +76,18 @@ export default class GoblinGame {
 
   reset() {
     this.score = 0;
-    this.aiScore = 0;
+    this.scoreLife = 5;
   }
 
-  async addScore(e) {
+  setHearts() {
+    let heart = '';
+    for (let i = 0; i < this.scoreLife; i += 1) {
+      heart += '❤';
+    }
+    this.heart = heart;
+  }
+
+  addScore(e) {
     e.preventDefault();
 
     if (e.target.classList.contains('character')) {
@@ -83,7 +95,8 @@ export default class GoblinGame {
       this.score += 1;
     } else {
       this.character.clearMark();
-      this.aiScore += 1;
+      this.scoreLife -= 1;
+      this.setHearts();
     }
 
     if (this.bestScore < this.score) {
@@ -91,7 +104,7 @@ export default class GoblinGame {
       localStorage.setItem('goblinGameScore', this.bestScore);
     }
 
-    if (this.aiScore > 4) {
+    if (this.scoreLife < 1) {
       this.init();
       alert('lose');
     }
