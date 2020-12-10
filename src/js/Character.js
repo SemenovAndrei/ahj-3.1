@@ -6,6 +6,7 @@ export default class Character {
     this.character = null;
     this.move = null;
     this.cells = null;
+    this.mark = null;
   }
 
   /**
@@ -27,11 +28,53 @@ export default class Character {
   }
 
   /**
+   * Записывает коллекцию ячеек в this.cells
+   *
+   * @returns this.cells
+   */
+  getCells() {
+    this.cells = document.getElementsByClassName('cell');
+    return this.cells;
+  }
+
+  /**
+   * Записывает индекс ячейки ( если в ней был персонаж ) в this.mark
+   */
+  setMark() {
+    this.mark = [...this.getCells()].findIndex((el) => el.hasChildNodes());
+  }
+
+  /**
+   * Очищает this.mark
+   */
+  clearMark() {
+    this.mark = null;
+  }
+
+  /**
+   * В ячейке, где был кликнутый персонаж,
+   * на 150мс появляется потомок с картинкой
+   */
+  getMarkCell() {
+    const mark = document.createElement('div');
+    mark.classList.add('cell-boom');
+    this.cells[this.mark].appendChild(mark);
+    setTimeout(() => {
+      mark.parentNode.removeChild(mark);
+    }, 150);
+  }
+
+  /**
    * Логика действий игрового персонажа
    */
   characterLogic() {
+    const cells = this.getCells();
+
+    if (this.mark !== null) {
+      this.getMarkCell();
+    }
+
     const character = this.getCharacter();
-    const cells = document.getElementsByClassName('cell');
 
     const func = () => {
       const freeCells = [...cells].filter((e) => !e.hasChildNodes());

@@ -67,10 +67,13 @@ export default class GoblinGame {
   }
 
   async addScore(e) {
+    e.preventDefault();
+
     if (e.target.classList.contains('character')) {
-      document.querySelector('.character').classList.add('character-boom');
+      this.character.setMark();
       this.score += 1;
     } else {
+      this.character.clearMark();
       this.aiScore += 1;
     }
 
@@ -85,9 +88,7 @@ export default class GoblinGame {
     }
 
     this.character.characterStop();
-    await new Promise(() => setTimeout(() => {
-      this.createUI();
-      this.character.characterLogic();
-    }, 150));
+    this.createUI();
+    this.character.characterLogic();
   }
 }
