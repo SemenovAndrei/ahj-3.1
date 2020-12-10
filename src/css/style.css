@@ -19,25 +19,21 @@ body {
   padding: 10px;
 }
 
-.score {
-  width: 33%;
+.statistic div {
+  padding: 10px;
+}
+
+.statistic {
+  width: 10%;
   font-size: 2rem;
   color: #ffffff;
   text-align: center;
 }
 
 @media (max-width: 640px) {
-  .score {
+  .statistic {
     font-size: 1rem;
   }
-}
-
-.score-best {
-  text-align-last: left;
-}
-
-.score-miss {
-  text-align: right;
 }
 
 .board {

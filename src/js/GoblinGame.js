@@ -54,9 +54,18 @@ export default class GoblinGame {
     return `
     <h1 class="title">Goblin Game</h1>
     <div class="statistics">
-    <div class="score score-best">Best Score : ${this.bestScore}</div>
-      <div class="score">Score : ${this.score}</div>
-      <div class="score score-miss">AI Score : ${this.aiScore}</div>
+      <div class="statistic">Best Score
+        <div class="score-best">${this.bestScore}
+        </div>
+      </div>
+      <div class="statistic">Score
+        <div class="score">${this.score}
+        </div>
+      </div>
+      <div class="statistic">AI Score
+        <div class="score-miss">${this.aiScore}
+        </div>
+      </div>
     </div>
     `;
   }
