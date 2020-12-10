@@ -78,6 +78,9 @@ export default class Character {
 
     const func = () => {
       const freeCells = [...cells].filter((e) => !e.hasChildNodes());
+
+      this.checkSurprise(character);
+
       const index = Math.floor(Math.random() * freeCells.length);
 
       freeCells[index].appendChild(character);
@@ -92,5 +95,15 @@ export default class Character {
    */
   characterStop() {
     clearInterval(this.move);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkSurprise(character) {
+    const chanceSurprise = Math.floor(Math.random() * 100);
+    if (chanceSurprise < 10) {
+      character.classList.add('character-suprise');
+    } else {
+      character.classList.remove('character-suprise');
+    }
   }
 }
