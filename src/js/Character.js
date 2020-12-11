@@ -102,7 +102,9 @@ export default class Character {
     const chanceSurprise = Math.floor(Math.random() * 100);
     if (chanceSurprise < 10) {
       character.classList.add('character-suprise');
+      character.classList.remove('character-evil');
     } else {
+      character.classList.add('character-evil');
       character.classList.remove('character-suprise');
     }
   }

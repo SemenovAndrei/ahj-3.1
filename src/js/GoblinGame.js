@@ -90,7 +90,7 @@ export default class GoblinGame {
   addScore(e) {
     e.preventDefault();
 
-    if (e.target.classList.contains('character')) {
+    if (e.target.classList.contains('character-evil')) {
       this.character.setMark();
       this.score += 1;
     } else {
