@@ -14,9 +14,19 @@ export default class GoblinGame {
     this.score = 0;
     this.scoreLife = 5;
     this.heart = null;
-    this.bestScore = localStorage.getItem('goblinGameScore', this.bestScore) || 0;
+    this.bestScore = localStorage.getItem('goblinGameScore') || 0;
     this.characterMove = null;
     this.container = null;
+
+    this.func = (e) => { this.addScore(e); };
+  }
+
+  /**
+   * Сбрасывает очки на значение по умолчанию
+   */
+  reset() {
+    this.score = 0;
+    this.scoreLife = 5;
   }
 
   /**
@@ -28,6 +38,8 @@ export default class GoblinGame {
     this.setHearts();
     this.createUI();
     this.character.characterLogic();
+
+    GoblinGame.showHint();
   }
 
   /**
@@ -35,7 +47,7 @@ export default class GoblinGame {
    */
   createUI() {
     const board = this.board.getBoard(this.size);
-    board.addEventListener('click', (e) => this.addScore(e));
+    board.addEventListener('click', this.func);
 
     const body = document.querySelector('body');
 
@@ -47,8 +59,6 @@ export default class GoblinGame {
     this.container = container;
 
     body.insertBefore(this.container, body.firstChild);
-
-    this.setHearts();
   }
 
   /**
@@ -56,7 +66,7 @@ export default class GoblinGame {
    */
   getContainerMarkUp() {
     return `
-    <h1 class="title">Goblin Game</h1>
+    <h1 class="title">Goblin Game</h1> 
     <div class="statistics">
       <div class="statistic">Best Score
         <div class="score-best">${this.bestScore}
@@ -74,21 +84,55 @@ export default class GoblinGame {
     `;
   }
 
-  reset() {
-    this.score = 0;
-    this.scoreLife = 5;
+  /**
+   * Показывает подсказку при наведении мыши
+   * или касании пальца
+   */
+  static showHint() {
+    const title = document.querySelector('.title');
+    const hint = document.querySelector('.board');
+
+    title.addEventListener('mouseenter', () => {
+      hint.classList.add('hint-active');
+    });
+    title.addEventListener('mouseleave', () => {
+      hint.classList.remove('hint-active');
+    });
+    title.addEventListener('touchstart', () => {
+      hint.classList.add('hint-active');
+    });
+    title.addEventListener('touchend', () => {
+      hint.classList.remove('hint-active');
+    });
   }
 
+  /**
+   * Устанавливает значение this.heart
+   */
   setHearts() {
     let heart = '';
-    for (let i = 0; i < this.scoreLife; i += 1) {
-      heart += '❤';
+
+    if (this.scoreLife) {
+      for (let i = 0; i < this.scoreLife; i += 1) {
+        heart += '❤';
+      }
+    } else {
+      heart = '💔';
     }
     this.heart = heart;
   }
 
+  /**
+   * Логика
+   * * добавление очков
+   * * проверка проигрыша
+   *
+   * @param {event} e - событие
+   */
   addScore(e) {
     e.preventDefault();
+
+    if (document.querySelector('.board').classList.contains('lock')) { console.log(1); }
 
     if (e.target.classList.contains('character-evil')) {
       this.character.setMark();
@@ -104,13 +148,21 @@ export default class GoblinGame {
       localStorage.setItem('goblinGameScore', this.bestScore);
     }
 
-    if (this.scoreLife < 1) {
-      this.init();
-      alert('lose');
-    }
-
     this.character.characterStop();
     this.createUI();
-    this.character.characterLogic();
+
+    if (this.scoreLife < 1) {
+      this.character.characterStop();
+
+      const board = document.querySelector('.board');
+      board.removeEventListener('click', this.func);
+      board.classList.add('lock');
+
+      setTimeout(() => {
+        this.init();
+      }, 1000);
+    } else {
+      this.character.characterLogic();
+    }
   }
 }

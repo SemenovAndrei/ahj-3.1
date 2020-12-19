@@ -6,39 +6,37 @@ body {
   background: rgb(0, 0, 0);
 }
 
+.container {
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .title {
-  text-align: center;
   font-size: 2em;
   color: #ffffff;
+  text-align: center;
 }
 
 .statistics {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 10px; */
-}
-
-.statistic div {
-  padding: 10px;
 }
 
 .statistic {
-  width: 15%;
+  width: 27%;
   font-size: 2rem;
   color: #ffffff;
   text-align: center;
 }
 
-.score-life {
-  color: red;
+.statistic div {
+  padding: 5px;
 }
 
-@media (max-width: 640px) {
-  .statistic {
-    width: 33%;
-    font-size: 1rem;
-  }
+.score-life {
+  color: red;
 }
 
 .board {
@@ -48,12 +46,51 @@ body {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   background-color: #000000;
   cursor: url('../images/hammer.png')30 -10, auto;
+}
+
+.hint-active::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  font-size: 6rem;
+  color: #ffffff;
+  text-align: center;
+  content: "hit goblin don't touch duck"
+}
+
+.lock::before {
+  content: '💔';
+  color: rgb(255, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10rem;
+  position: absolute;
+  background-color: #000000;
+  opacity: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  animation: scale 1s linear 1 forwards;
+
+}
+
+@keyframes scale {
+  from { font-size: 3rem };
+  to { font-size: 10rem };
 }
 
 .cell {
@@ -86,8 +123,31 @@ body {
 .cell-boom {
   width: 50%;
   height: 50%;
-  background-image: url('../images/pngegg.png');
+  background-image: url('../images/boom.png');
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+
+@media (max-width: 640px) {
+  .statistic {
+    width: 33%;
+    font-size: 1rem;
+  }
+
+  .hint-active::before {
+    font-size: 3rem;
+  }
+
+  .lock::before {
+    font-size: 6rem;
+    animation: scaleMobile 1s linear 1 forwards;
+  }
+  
+  @keyframes scaleMobile {
+    from { font-size: 2rem };
+    to { font-size: 6rem };
+  } 
+
 }
 
