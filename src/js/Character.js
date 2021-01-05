@@ -1,9 +1,10 @@
+/* eslint-disable no-param-reassign */
 /**
  * @class Character
  */
 export default class Character {
   constructor() {
-    this.character = null;
+    this.character = {};
     this.move = null;
     this.cells = null;
     this.mark = null;
@@ -16,7 +17,7 @@ export default class Character {
     const character = document.createElement('div');
     character.classList.add('character');
 
-    this.character = character;
+    this.character.node = character;
   }
 
   /**
@@ -67,28 +68,28 @@ export default class Character {
   /**
    * Логика действий игрового персонажа
    */
-  characterLogic() {
-    const cells = this.getCells();
+  // characterLogic() {
+  //   const cells = this.getCells();
 
-    if (this.mark !== null) {
-      this.getMarkCell();
-    }
+  //   if (this.mark !== null) {
+  //     this.getMarkCell();
+  //   }
 
-    const character = this.getCharacter();
+  //   const character = this.getCharacter();
 
-    const func = () => {
-      const freeCells = [...cells].filter((e) => !e.hasChildNodes());
+  //   const func = () => {
+  //     const freeCells = [...cells].filter((e) => !e.hasChildNodes());
 
-      this.checkSurprise(character);
+  //     this.checkSurprise(character);
 
-      const index = Math.floor(Math.random() * freeCells.length);
+  //     const index = Math.floor(Math.random() * freeCells.length);
 
-      freeCells[index].appendChild(character);
-    };
+  //     freeCells[index].appendChild(character);
+  //   };
 
-    func();
-    this.move = setInterval(func, 1000);
-  }
+  //   func();
+  //   this.move = setInterval(func, 1000);
+  // }
 
   /**
    * Останавливает перемещение игрового персонажа
@@ -98,14 +99,16 @@ export default class Character {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  checkSurprise(character) {
+  checkSurprise() {
     const chanceSurprise = Math.floor(Math.random() * 100);
-    if (chanceSurprise < 10) {
-      character.classList.add('character-suprise');
-      character.classList.remove('character-evil');
+    if (chanceSurprise > 98) {
+      this.character.node.classList.add('character-suprise');
+      this.character.node.classList.remove('character-evil');
+      this.character.duck = true;
     } else {
-      character.classList.add('character-evil');
-      character.classList.remove('character-suprise');
+      this.character.node.classList.add('character-evil');
+      this.character.node.classList.remove('character-suprise');
+      this.character.duck = false;
     }
   }
 }

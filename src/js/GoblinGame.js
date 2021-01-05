@@ -37,7 +37,7 @@ export default class GoblinGame {
     this.reset();
     this.setHearts();
     this.createUI();
-    this.character.characterLogic();
+    this.characterLogic();
 
     GoblinGame.showHint();
   }
@@ -162,7 +162,58 @@ export default class GoblinGame {
         this.init();
       }, 1000);
     } else {
-      this.character.characterLogic();
+      this.characterLogic();
     }
+  }
+
+  characterLogic() {
+    const cells = this.character.getCells();
+
+    if (this.character.mark !== null) {
+      this.character.getMarkCell();
+    }
+
+    this.character.getCharacter();
+
+    const func = () => {
+      const freeCells = [...cells].filter((e) => !e.hasChildNodes());
+
+      this.character.checkSurprise();
+
+      const index = Math.floor(Math.random() * freeCells.length);
+
+      freeCells[index].appendChild(this.character.character.node);
+    };
+
+    func();
+    this.character.move = setInterval(() => {
+      func();
+
+      if (this.character.character.duck) {
+        // this.scoreLife += 1;
+      } else {
+        this.scoreLife -= 1;
+      }
+      this.character.clearMark();
+
+      this.character.characterStop();
+
+      this.setHearts();
+      this.createUI();
+
+      if (this.scoreLife < 1) {
+        this.character.characterStop();
+
+        const board = document.querySelector('.board');
+        board.removeEventListener('click', this.func);
+        board.classList.add('lock');
+
+        setTimeout(() => {
+          this.init();
+        }, 1000);
+      } else {
+        this.characterLogic();
+      }
+    }, 1000);
   }
 }
